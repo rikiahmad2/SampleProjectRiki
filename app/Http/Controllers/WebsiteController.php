@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaginationHelper;
-use App\Models\Website;
 use App\Services\WebsiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

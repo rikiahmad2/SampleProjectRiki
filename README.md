@@ -78,7 +78,7 @@ Provide a brief description of your project here.
     php artisan l5-swagger:generate
     ```
 4. Open the URL for API docs:
-   [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   [http://127.0.0.1:8000/api/documentation](http://127.0.0.1:8000/api/documentation)
 5. To manually send notifications and check emails sent to Mailtrap:
     ```bash
     php artisan notifications:sendposts

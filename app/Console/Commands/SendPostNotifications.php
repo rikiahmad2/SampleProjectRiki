@@ -2,9 +2,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Post;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class SendPostNotifications extends Command
 {
@@ -18,15 +15,7 @@ class SendPostNotifications extends Command
 
     public function handle()
     {
-        $posts = Post::where('sent', false)->get();
-
-        foreach ($posts as $post) {
-            foreach ($post->website->subscribers as $subscriber) {
-                Mail::to($subscriber->email)->queue(new PostNotification($post));
-                $post->update(['sent' => true]);
-            }
-        }
-
-        $this->info('Post notifications sent successfully.');
+        dispatch(new \App\Jobs\SendPostNotificationsJob());
+        $this->info('Post notifications job dispatched.');
     }
 }

@@ -30,7 +30,7 @@ Provide a brief description of your project here.
     ```
 
 3. **Setup .env file:**
-   - Configure your database connection and mailtrap settings in the `.env` file:
+   - Configure your database connection and mailtrap settings in the `.env` file & prepare the queue DB:
      ```env
      # Mailtrap Configuration
      MAIL_MAILER=smtp
@@ -41,6 +41,7 @@ Provide a brief description of your project here.
      MAIL_ENCRYPTION=tls
      MAIL_FROM_ADDRESS=user@mailtrap.com
      MAIL_FROM_NAME="${APP_NAME}"
+     QUEUE_CONNECTION=database
 
      # Database Configuration
      DB_CONNECTION=mysql
@@ -83,11 +84,14 @@ Provide a brief description of your project here.
     ```bash
     php artisan notifications:sendposts
     ```
-6. For QUEUE command:
+6. For triggering the command:
     ```bash
-    php artisan queue:command your:custom-command
+    php artisan notifications:sendposts
     ```
-7. Replace `your:custom-command` with the actual name of your custom command.
+7. for triggering the queue worker
+    ```bash
+    php artisan queue:work
+    ``````
 
 ## Contributing
 

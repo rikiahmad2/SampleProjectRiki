@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Website;
-use Illuminate\Support\Facades\Validator;
+use App\Services\SubscriberService;
 
 
 class SubscriberController extends Controller
 {
+    protected $subscriberService;
+
+    public function __construct(SubscriberService $subscriberService)
+    {
+        $this->subscriberService = $subscriberService;
+    }
 
     /**
      * @OA\Post(
@@ -54,15 +60,15 @@ class SubscriberController extends Controller
      */
     public function subscribe(Request $request, Website $website)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:subscribers,email,NULL,id,website_id,' . $website->id,
-        ]);
+        $data = [
+            'email' => $request->input('email'),
+        ];
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422); // Validation failed
+        $result = $this->subscriberService->subscribe($website, $data);
+        if (isset($result['errors'])) {
+            return response()->json(['errors' => $result['errors']], 422);
         }
 
-        $subscriber = $website->subscribers()->create($validator->validated());
-        return response()->json(['message' => 'Subscribed successfully', 'subscriber' => $subscriber], 201);
+        return response()->json($result, 201);
     }
 }

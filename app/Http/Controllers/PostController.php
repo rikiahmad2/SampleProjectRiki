@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use App\Models\Website;
+use App\Services\PostService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     /**
      * Create a new post for a website.
      *
@@ -50,21 +56,17 @@ class PostController extends Controller
      */
     public function store(Request $request, Website $website)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
-            'description' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-        
-        $post = Post::create([
-            'website_id' => $website->id,
+        $data = [
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-        ]);
+        ];
 
-        return response()->json(['message' => 'Post created successfully', 'post' => $post], 201);
+        $result = $this->postService->createPost($website, $data);
+
+        if (isset($result['errors'])) {
+            return response()->json(['errors' => $result['errors']], 400);
+        }
+
+        return response()->json($result, 201);
     }
 }

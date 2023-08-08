@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaginationHelper;
-use App\Models\Subscriber;
 use App\Models\Website;
+use App\Services\WebsiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Annotations as OpenApi;
@@ -18,6 +18,15 @@ use OpenApi\Annotations as OpenApi;
  */
 class WebsiteController extends Controller
 {
+
+    protected $websiteService;
+    protected $paginationService;
+
+    public function __construct(WebsiteService $websiteService)
+    {
+        $this->websiteService = $websiteService;
+    }
+
     /**
      * @OA\Get(
      *      path="/websites",
@@ -41,7 +50,7 @@ class WebsiteController extends Controller
         $perPage = $request->input('per_page', 10);
         $page = $request->input('page', 1);
 
-        $websites = Website::all();
+        $websites = $this->websiteService->getAllWebsites();
         $paginatedData = PaginationHelper::paginate($websites, $page, $perPage);
 
         return response()->json($paginatedData);
@@ -90,12 +99,13 @@ class WebsiteController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-
-        $website = Website::create([
+        
+        $data = [
             'name' => $request->input('name'),
             'url' => $request->input('url'),
-        ]);
+        ];
 
+        $website = $this->websiteService->createWebsite($data);
         return response()->json($website, 201);
     }
 }

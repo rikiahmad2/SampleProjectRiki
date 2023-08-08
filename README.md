@@ -80,15 +80,11 @@ Provide a brief description of your project here.
     ```
 4. Open the URL for API docs:
    [http://127.0.0.1:8000/api/documentation](http://127.0.0.1:8000/api/documentation)
-5. To manually send notifications and check emails sent to Mailtrap:
+5. To manually dispatch the job and adding to queue using command:
     ```bash
     php artisan notifications:sendposts
     ```
-6. For triggering the command:
-    ```bash
-    php artisan notifications:sendposts
-    ```
-7. for triggering the queue worker
+6. for triggering the queue worker
     ```bash
     php artisan queue:work
     ``````

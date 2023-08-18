@@ -1,6 +1,7 @@
 <?php
 namespace App\Console\Commands;
 
+use App\Models\Post;
 use Illuminate\Console\Command;
 
 class SendPostNotifications extends Command
@@ -15,7 +16,22 @@ class SendPostNotifications extends Command
 
     public function handle()
     {
-        dispatch(new \App\Jobs\SendPostNotificationsJob());
-        $this->info('Post notifications job dispatched.');
+        $chunkSize = 100;
+        Post::chunk($chunkSize, function ($posts) {
+            foreach ($posts as $post) {
+                $this->info('Processing post: ' . $post->title);
+                
+                // Get subscribers related to the post's website
+                $subscribers = $post->website->subscribers;
+                
+                // Attach subscribers to the post
+                foreach ($subscribers as $subscriber) {
+                    $post->subscribers()->attach($subscriber->id, ['status' => false]);
+                }
+                
+                // Mark the post as sent
+                $post->update(['sent' => true]);
+            }
+        });   
     }
 }

@@ -9,7 +9,7 @@ class SubscriberService
     public function subscribe(Website $website, array $data)
     {
         $validator = Validator::make($data, [
-            'email' => 'required|email|unique:subscribers,email,NULL,id,website_id,' . $website->id,
+            'email' => 'required|email|max:255|unique:subscribers,email,NULL,id,website_id,' . $website->id,
         ]);
 
         if ($validator->fails()) {

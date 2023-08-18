@@ -10,7 +10,7 @@ class PostService
     public function createPost(Website $website, array $data)
     {
         $validator = Validator::make($data, [
-            'title' => 'required|string',
+            'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 

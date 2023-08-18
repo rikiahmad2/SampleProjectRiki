@@ -10,8 +10,8 @@ class Subscriber extends Model
     use HasFactory;
     protected $fillable = ['email', 'website_id'];
 
-    public function website()
+    public function posts()
     {
-        return $this->belongsTo(Website::class);
+        return $this->belongsToMany(Post::class);
     }
 }

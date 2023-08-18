@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'website_id', 'sent'];
+    protected $fillable = ['title', 'description', 'website_id'];
 
-    public function website()
+    public function subscribers()
     {
-        return $this->belongsTo(Website::class);
+        return $this->belongsToMany(Subscriber::class);
     }
 }

@@ -18,7 +18,6 @@ class CreateSubscribersTable extends Migration
             $table->string('email');
             $table->unsignedBigInteger('website_id');
             $table->timestamps();
-            $table->foreign('website_id')->references('id')->on('websites');
         });
     }
 
